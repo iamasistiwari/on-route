@@ -1,0 +1,23 @@
+name: gst-to-contact
+method: GET
+url: https://api.scaninfoga.com/api/v1/user/get-wallet
+headers:
+  - key: sec-ch-ua-platform
+    value: '"macOS"'
+  - key: Referer
+    value: https://underdev.scaninfoga.com/
+  - key: sec-ch-ua
+    value: '"Google Chrome";v="153", "Not_A Brand";v="8", "Chromium";v="153"'
+  - key: sec-ch-ua-mobile
+    value: ?0
+  - key: x-enc-pub
+    value: BLF+pcCU6NwFsGjJH0txvMEy2gqpetMS5q+KJyziYKKn6amfO9Hyo3gi8zacXfsnX7pPyZ83A64/Pmtqi0dufQM=
+  - key: clientInfo
+    value: '{"latitude":"28.601965136226212","longitude":"77.09417409757759","ip":"103.112.19.154","browser":"Chrome","device":"Mac","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36","platform":"macOS","language":"en-GB","cookiesEnabled":true,"javascriptEnabled":true,"touchSupport":false,"deviceType":"desktop","cpuCores":"10","memory":"16 GB","screenSize":"1470x956","batteryLevel":"20%","isCharging":"false","gpuRenderer":"ANGLE (Apple, ANGLE Metal Renderer: Apple M4, Unspecified Version)","cameras":"1","microphones":"1","publicIp":"103.112.19.154","isp":"AS137121 OMNET Broadband Services PVT LTD.","asn":"AS137121","city":"Delhi Cantonment","country":"IN","possibleIoT":false,"page":"365Intelligence"}'
+  - key: User-Agent
+    value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36
+  - key: Accept
+    value: application/json, text/plain, */*
+auth:
+  type: bearer
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtb2NtcjEyNjAwMDAxaXQzYWU4OGoyNzIiLCJ0aWVyIjoiQURNSU4iLCJpYXQiOjE3ODk1Njg2NTYsImV4cCI6MTc5MDE3MzQ1Nn0.y-Wt2Lt5hsyvQ462GMA4vEy4QNSnmnhcND-vaAZ3oW0

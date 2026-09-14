@@ -1,0 +1,17 @@
+name: gst-to-contact1
+method: POST
+url: https://api.scaninfoga.com/api/v1/gst/gst-to-contact
+headers:
+  - key: clientInfo
+    value: '{"latitude":"28.601933793532535","longitude":"77.0942203467193","ip":"103.112.19.157","browser":"Chrome","device":"Mac","userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36","platform":"macOS","language":"en-GB","cookiesEnabled":true,"javascriptEnabled":true,"touchSupport":false,"deviceType":"desktop","cpuCores":"10","memory":"16 GB","screenSize":"1470x956","batteryLevel":"26%","isCharging":"false","gpuRenderer":"ANGLE (Apple, ANGLE Metal Renderer: Apple M4, Unspecified Version)","cameras":"1","microphones":"1","publicIp":"103.112.19.157","isp":"AS137121 OMNET Broadband Services PVT LTD.","asn":"AS137121","city":"Delhi","country":"IN","possibleIoT":false,"page":"Auth"}'
+  - key: api-key
+    value: DLSCWCZJVRKVLJF
+body:
+  type: json
+  content: |-
+    {
+      "gst_number": "06AADCH6128C1ZZ",
+      "realtime_data": false,
+      "purpose": "verification",
+      "consent": "I confirm that I have obtained user consent to access and process data for verification and compliance purposes."
+    }

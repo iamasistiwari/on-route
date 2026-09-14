@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "on_route",
+  "auth": {
+    "type": "none"
+  },
+  "variables": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.scaninfoga.com"
+    },
+    {
+      "key": "api-key",
+      "value": "DLSCWCZJVRKVLJF"
+    }
+  ]
+}

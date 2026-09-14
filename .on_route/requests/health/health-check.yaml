@@ -1,0 +1,7 @@
+name: health_check
+method: GET
+url: "{{baseUrl}}/health"
+body:
+  type: raw
+  contentType: text/plain
+  content: ""

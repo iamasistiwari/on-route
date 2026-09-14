@@ -1,0 +1,146 @@
+{
+  "info": {
+    "_postman_id": "3f1c2a8e-6b2f-4f7e-9a51-2d0c3e4b5a61",
+    "name": "Petstore API",
+    "description": "Sample collection for the **Petstore**.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://petstore.example.com/v1", "type": "string" },
+    { "key": "legacy", "value": "old", "disabled": true }
+  ],
+  "event": [{ "listen": "prerequest", "script": { "type": "text/javascript", "exec": ["console.log('hi')"] } }],
+  "item": [
+    {
+      "name": "Pets",
+      "description": { "content": "Pet endpoints", "type": "text/markdown" },
+      "auth": {
+        "type": "apikey",
+        "apikey": [
+          { "key": "key", "value": "X-Api-Key", "type": "string" },
+          { "key": "value", "value": "{{apiKey}}", "type": "string" },
+          { "key": "in", "value": "header", "type": "string" }
+        ]
+      },
+      "item": [
+        {
+          "name": "List Pets",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "X-Debug", "value": "1", "disabled": true }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pets?limit=10&status=available",
+              "host": ["{{baseUrl}}"],
+              "path": ["pets"],
+              "query": [
+                { "key": "limit", "value": "10" },
+                { "key": "status", "value": "available", "description": "Filter" },
+                { "key": "tag", "value": "dog", "disabled": true }
+              ]
+            },
+            "description": "Returns all pets"
+          }
+        },
+        {
+          "name": "Create Pet",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rex\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/pets"
+          }
+        },
+        {
+          "name": "Upload Photo",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "caption", "value": "cute", "type": "text" },
+                { "key": "photo", "type": "file", "src": "/tmp/rex.png" },
+                { "key": "old", "value": "x", "type": "text", "disabled": true }
+              ]
+            },
+            "url": {
+              "protocol": "https",
+              "host": ["petstore", "example", "com"],
+              "port": "8443",
+              "path": ["v1", "pets", ":petId", "photo"]
+            }
+          }
+        },
+        {
+          "name": "Admin",
+          "auth": { "type": "noauth" },
+          "item": [
+            {
+              "name": "Purge",
+              "request": { "method": "PURGE", "url": "{{baseUrl}}/admin/purge" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "auth": {
+          "type": "basic",
+          "basic": [
+            { "key": "username", "value": "admin", "type": "string" },
+            { "key": "password", "value": "s3cret", "type": "string" }
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "grant_type", "value": "password" },
+            { "key": "scope", "value": "all", "disabled": true }
+          ]
+        },
+        "url": "{{baseUrl}}/login"
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "PUT",
+        "auth": { "type": "oauth2", "oauth2": [] },
+        "body": { "mode": "file", "file": { "src": "fixtures/data.bin" } },
+        "url": "{{baseUrl}}/upload"
+      }
+    },
+    {
+      "name": "Search (GraphQL)",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "graphql",
+          "graphql": { "query": "query { pets { id } }", "variables": "{\"first\": 5}" }
+        },
+        "url": "{{baseUrl}}/graphql"
+      }
+    },
+    {
+      "name": "Notes",
+      "request": {
+        "method": "post",
+        "body": { "mode": "raw", "raw": "<note/>", "options": { "raw": { "language": "xml" } } },
+        "url": "{{baseUrl}}/notes"
+      }
+    }
+  ]
+}

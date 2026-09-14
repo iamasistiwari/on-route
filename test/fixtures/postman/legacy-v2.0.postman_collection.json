@@ -1,0 +1,23 @@
+{
+  "info": {
+    "name": "Legacy v2.0",
+    "_postman_id": "a8b1c2d3-0000-4000-8000-000000000000",
+    "description": "Old export",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Ping",
+      "request": "https://api.example.com/ping"
+    },
+    {
+      "name": "Me",
+      "request": {
+        "method": "GET",
+        "header": "Accept: application/json\nX-Trace: abc",
+        "auth": { "type": "bearer", "bearer": { "token": "tok-123" } },
+        "url": "https://api.example.com/me"
+      }
+    }
+  ]
+}

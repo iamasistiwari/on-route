@@ -1,0 +1,4 @@
+*.local.yaml
+.history/
+# Environments not committed (Overview > Environments > Commit to git)
+environments/dev.yaml

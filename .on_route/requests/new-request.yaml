@@ -1,0 +1,30 @@
+name: GET /
+method: GET
+url: ""
+headers:
+  - key: accept
+    value: "*/*"
+  - key: accept-language
+    value: en-GB,en-US;q=0.9,en;q=0.8
+  - key: priority
+    value: i
+  - key: range
+    value: bytes=0-
+  - key: referer
+    value: https://www.bensound.com/
+  - key: sec-ch-ua
+    value: '"Google Chrome";v="153", "Not_A Brand";v="8", "Chromium";v="153"'
+  - key: sec-ch-ua-mobile
+    value: ?0
+  - key: sec-ch-ua-platform
+    value: '"macOS"'
+  - key: sec-fetch-dest
+    value: audio
+  - key: sec-fetch-mode
+    value: no-cors
+  - key: sec-fetch-site
+    value: same-site
+  - key: user-agent
+    value: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36
+  - key: Cookie
+    value: _gcl_au=1.1.743396063.1789916160; _fbp=fb.1.1789916160265.853008852827781593; _ga=GA1.1.855104670.1789916160; _clck=mdsozf%5E2%5Eg9m%5E0%5E2454; _tt_enable_cookie=1; _ttp=01M2ZN28QACQNCK605462MKZM4_.tt.1.1789916160746; _ga_76M9F7L38E=GS2.1.s1789916160$o1$g1$t1789916191$j29$l0$h1085588293; _clsk=1ycbmvq%5E1789920377615%5E1%5E1%5Er.clarity.ms%2Fcollect; ttcsid=1789920378563::5Jf3d2HLmOfEtDNCaj3c.2.1789920378575.0; ttcsid_CUGTUIJC77U4QKJN93L0=1789920378575::9l5AiPr0FpfmkIdtC0v2.2.1789920378575.0

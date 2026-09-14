@@ -1,0 +1,393 @@
+{
+  "name": "on-route",
+  "displayName": "On Route",
+  "description": "Git-friendly API client. Requests live in your repo under .on_route/.",
+  "version": "0.1.0",
+  "publisher": "on-route",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Testing"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "workspaceContains:.on_route"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "onRoute",
+          "title": "On Route",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "onRoute": [
+        {
+          "type": "webview",
+          "id": "onRoute.explorer",
+          "name": "Endpoints"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "onRoute.init",
+        "title": "Initialize Project",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.openOverview",
+        "title": "Open Overview",
+        "category": "On Route",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "onRoute.newRequest",
+        "title": "New Request",
+        "category": "On Route",
+        "icon": "$(add)"
+      },
+      {
+        "command": "onRoute.newFolder",
+        "title": "New Folder",
+        "category": "On Route",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "onRoute.scanProject",
+        "title": "Scan Project for Endpoints",
+        "category": "On Route",
+        "icon": "$(radio-tower)"
+      },
+      {
+        "command": "onRoute.openRequest",
+        "title": "Open Request",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.renameItem",
+        "title": "Rename",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.deleteItem",
+        "title": "Delete",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.duplicateRequest",
+        "title": "Duplicate",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.importCurl",
+        "title": "Import from cURL (clipboard)",
+        "category": "On Route",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "onRoute.importPostman",
+        "title": "Import Postman Collection",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.copyAsCurl",
+        "title": "Copy as cURL",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.copyAsAxios",
+        "title": "Copy as axios",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.selectEnvironment",
+        "title": "Select Environment",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.refresh",
+        "title": "Refresh",
+        "category": "On Route",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "onRoute.focusFilter",
+        "title": "Filter Endpoints",
+        "category": "On Route"
+      },
+      {
+        "command": "onRoute.sendRequest",
+        "title": "Send Request",
+        "category": "On Route"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "onRoute.newRequest",
+          "when": "view == onRoute.explorer && onRoute.initialized",
+          "group": "navigation@2"
+        },
+        {
+          "command": "onRoute.newFolder",
+          "when": "view == onRoute.explorer && onRoute.initialized",
+          "group": "navigation@3"
+        },
+        {
+          "command": "onRoute.scanProject",
+          "when": "view == onRoute.explorer && onRoute.initialized",
+          "group": "navigation@4"
+        },
+        {
+          "command": "onRoute.openOverview",
+          "when": "view == onRoute.explorer && onRoute.initialized",
+          "group": "navigation@1"
+        },
+        {
+          "command": "onRoute.importPostman",
+          "when": "view == onRoute.explorer",
+          "group": "more"
+        },
+        {
+          "command": "onRoute.importCurl",
+          "when": "view == onRoute.explorer && onRoute.initialized",
+          "group": "more"
+        }
+      ],
+      "webview/context": [
+        {
+          "command": "onRoute.newRequest",
+          "when": "webview == onRoute.explorer && webviewSection == folder",
+          "group": "1_new@1"
+        },
+        {
+          "command": "onRoute.newFolder",
+          "when": "webview == onRoute.explorer && webviewSection == folder",
+          "group": "1_new@2"
+        },
+        {
+          "command": "onRoute.copyAsCurl",
+          "when": "webview == onRoute.explorer && webviewSection == request",
+          "group": "2_copy@1"
+        },
+        {
+          "command": "onRoute.copyAsAxios",
+          "when": "webview == onRoute.explorer && webviewSection == request",
+          "group": "2_copy@2"
+        },
+        {
+          "command": "onRoute.duplicateRequest",
+          "when": "webview == onRoute.explorer && webviewSection == request",
+          "group": "3_edit@1"
+        },
+        {
+          "command": "onRoute.renameItem",
+          "when": "webview == onRoute.explorer && (webviewSection == request || webviewSection == folder)",
+          "group": "3_edit@2"
+        },
+        {
+          "command": "onRoute.deleteItem",
+          "when": "webview == onRoute.explorer && (webviewSection == request || webviewSection == folder)",
+          "group": "3_edit@3"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "onRoute.openRequest",
+          "when": "false"
+        },
+        {
+          "command": "onRoute.renameItem",
+          "when": "false"
+        },
+        {
+          "command": "onRoute.deleteItem",
+          "when": "false"
+        },
+        {
+          "command": "onRoute.duplicateRequest",
+          "when": "false"
+        },
+        {
+          "command": "onRoute.sendRequest",
+          "when": "activeWebviewPanelId == onRoute.request"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "onRoute.selectEnvironment",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e",
+        "when": "!onRoute.customShortcut.selectEnvironment"
+      },
+      {
+        "command": "onRoute.focusFilter",
+        "key": "ctrl+f",
+        "mac": "cmd+f",
+        "when": "(focusedView == onRoute.explorer || (activeWebviewPanelId == onRoute.request || activeWebviewPanelId == onRoute.overview) && !sideBarFocus && !terminalFocus && !inQuickOpen && !panelFocus && !auxiliaryBarFocus) && !onRoute.customShortcut.focusFilter"
+      },
+      {
+        "command": "onRoute.sendRequest",
+        "key": "ctrl+enter",
+        "mac": "cmd+enter",
+        "when": "(activeWebviewPanelId == onRoute.request && !sideBarFocus && !terminalFocus && !inQuickOpen && !panelFocus && !auxiliaryBarFocus || focusedView == onRoute.explorer && activeWebviewPanelId == onRoute.request) && !onRoute.customShortcut.send"
+      },
+      {
+        "command": "onRoute.sendRequest",
+        "key": "ctrl+enter",
+        "mac": "ctrl+enter",
+        "when": "(activeWebviewPanelId == onRoute.request && !sideBarFocus && !terminalFocus && !inQuickOpen && !panelFocus && !auxiliaryBarFocus || focusedView == onRoute.explorer && activeWebviewPanelId == onRoute.request) && !onRoute.customShortcut.send"
+      }
+    ],
+    "configuration": {
+      "title": "On Route",
+      "properties": {
+        "onRoute.timeoutMs": {
+          "type": "number",
+          "default": 0,
+          "description": "Request timeout in milliseconds. 0 (default) = wait until the server responds or you cancel."
+        },
+        "onRoute.rejectUnauthorized": {
+          "type": "boolean",
+          "default": true,
+          "description": "Verify TLS certificates."
+        },
+        "onRoute.followRedirects": {
+          "type": "boolean",
+          "default": true,
+          "description": "Follow HTTP redirects."
+        },
+        "onRoute.responseFontSize": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 32,
+          "description": "Font size (px) of the response body viewer. 0 follows the editor font size."
+        },
+        "onRoute.autoSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Save open requests and overview edits automatically, every onRoute.autoSaveIntervalSeconds."
+        },
+        "onRoute.autoSaveIntervalSeconds": {
+          "type": "number",
+          "default": 10,
+          "enum": [
+            0,
+            10,
+            20,
+            30,
+            60,
+            120,
+            300
+          ],
+          "enumDescriptions": [
+            "Immediately, shortly after you stop typing",
+            "10 seconds",
+            "20 seconds",
+            "30 seconds",
+            "1 minute",
+            "2 minutes",
+            "5 minutes"
+          ],
+          "description": "How often auto save writes unsaved changes. 0 saves immediately."
+        },
+        "onRoute.historyLimit": {
+          "type": "number",
+          "default": 20,
+          "description": "Responses kept per request in .on_route/.history."
+        },
+        "onRoute.collapseLongStrings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Shorten long JSON string values in the request body editor (\u2026view more)."
+        },
+        "onRoute.collapseStringsOver": {
+          "type": "number",
+          "default": 40,
+          "minimum": 1,
+          "description": "Characters of a JSON string value shown before it is shortened (onRoute.collapseLongStrings)."
+        },
+        "onRoute.shortcuts": {
+          "type": "object",
+          "default": {},
+          "markdownDescription": "Custom shortcuts for On Route, e.g. `{ \"send\": \"Mod+Shift+Enter\" }`. `Mod` is Cmd on macOS and Ctrl elsewhere. Easiest to change on the On Route Overview > Settings page.",
+          "properties": {
+            "send": {
+              "type": "string",
+              "description": "Send request"
+            },
+            "save": {
+              "type": "string",
+              "description": "Save request"
+            },
+            "focusFilter": {
+              "type": "string",
+              "description": "Search endpoints"
+            },
+            "selectEnvironment": {
+              "type": "string",
+              "description": "Select environment"
+            },
+            "toggleRequestPane": {
+              "type": "string",
+              "description": "Show / hide request pane"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "npm run build:ext && npm run build:web",
+    "build:ext": "node esbuild.mjs",
+    "build:web": "vite build",
+    "watch:ext": "node esbuild.mjs --watch",
+    "watch:web": "vite build --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.webview.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package": "npm run build && vsce package --no-dependencies"
+  },
+  "dependencies": {
+    "undici": "^8.10.2",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@codemirror/autocomplete": "^6.20.3",
+    "@codemirror/lang-html": "^6.4.12",
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/lang-json": "^6.0.2",
+    "@codemirror/lang-php": "^6.0.2",
+    "@codemirror/lang-xml": "^6.1.0",
+    "@codemirror/legacy-modes": "^6.5.4",
+    "@codemirror/state": "^6.7.4",
+    "@codemirror/view": "^6.43.11",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.5.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/vscode": "^1.90.0",
+    "@uiw/react-codemirror": "^4.25.11",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^3.2.7"
+  }
+}
