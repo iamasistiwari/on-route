@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E2A4A"/>
+      <stop offset="1" stop-color="#0A0F1F"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="188" cy="72" r="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38BDF8" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#38BDF8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="route" x1="68" y1="184" x2="188" y2="72" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="url(#bg)"/>
+  <rect width="256" height="256" rx="58" fill="url(#glow)"/>
+  <rect x="1.5" y="1.5" width="253" height="253" rx="56.5" fill="none" stroke="url(#edge)" stroke-width="3"/>
+  <path d="M68 184H148a28 28 0 0 0 0-56H108a28 28 0 0 1 0-56H188" fill="none" stroke="url(#route)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="68" cy="184" r="17" fill="#0F1629" stroke="#34D399" stroke-width="10"/>
+  <circle cx="188" cy="72" r="26" fill="#38BDF8" opacity=".22"/>
+  <circle cx="188" cy="72" r="18" fill="#38BDF8"/>
+  <circle cx="188" cy="72" r="7" fill="#FFFFFF"/>
+</svg>

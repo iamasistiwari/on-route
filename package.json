@@ -1,16 +1,45 @@
 {
   "name": "on-route",
   "displayName": "On Route",
-  "description": "Git-friendly API client. Requests live in your repo under .on_route/.",
+  "description": "Git-friendly REST & WebSocket API client. Every request is a YAML file in your repo — scan your code for endpoints, paste cURL, share via git.",
   "version": "0.1.0",
   "publisher": "on-route",
   "license": "MIT",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#0F1629",
+    "theme": "dark"
+  },
+  "author": {
+    "name": "Ashish Tiwari"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamasistiwari/on-route.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iamasistiwari/on-route/issues"
+  },
+  "homepage": "https://github.com/iamasistiwari/on-route#readme",
+  "pricing": "Free",
+  "keywords": [
+    "api",
+    "rest",
+    "http",
+    "client",
+    "postman",
+    "curl",
+    "websocket",
+    "api-client",
+    "yaml",
+    "git"
+  ],
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Other",
-    "Testing"
+    "Testing",
+    "Other"
   ],
   "main": "./dist/extension.js",
   "activationEvents": [
@@ -63,7 +92,7 @@
         "command": "onRoute.scanProject",
         "title": "Scan Project for Endpoints",
         "category": "On Route",
-        "icon": "$(radio-tower)"
+        "icon": "$(refresh)"
       },
       {
         "command": "onRoute.openRequest",
@@ -308,13 +337,18 @@
         "onRoute.collapseLongStrings": {
           "type": "boolean",
           "default": true,
-          "description": "Shorten long JSON string values in the request body editor (\u2026view more)."
+          "description": "Shorten long JSON string values in the request body editor (…view more)."
         },
         "onRoute.collapseStringsOver": {
           "type": "number",
           "default": 40,
           "minimum": 1,
           "description": "Characters of a JSON string value shown before it is shortened (onRoute.collapseLongStrings)."
+        },
+        "onRoute.autoFixJson": {
+          "type": "boolean",
+          "default": true,
+          "description": "Repair an invalid JSON request body (missing or doubled commas and quotes, single quotes, unquoted keys, missing brackets…) and format it right before sending."
         },
         "onRoute.shortcuts": {
           "type": "object",
@@ -356,7 +390,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.webview.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "package": "npm run build && vsce package --no-dependencies"
+    "package": "vsce package --no-dependencies",
+    "vscode:prepublish": "npm run build",
+    "publish": "vsce publish --no-dependencies"
   },
   "dependencies": {
     "undici": "^8.10.2",
@@ -383,6 +419,7 @@
     "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
+    "jsonrepair": "^3.15.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "tailwindcss": "^4.3.3",

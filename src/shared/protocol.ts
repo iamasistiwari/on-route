@@ -123,6 +123,8 @@ export interface UserSettings {
   collapseLongStrings: boolean;
   /** Characters shown before a value is shortened. */
   collapseStringsOver: number;
+  /** Repair an invalid JSON body (missing commas, stray quotes…) right before sending. */
+  autoFixJson: boolean;
   shortcuts: Shortcuts;
 }
 
@@ -133,6 +135,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   autoSaveIntervalSeconds: 10,
   collapseLongStrings: true,
   collapseStringsOver: DEFAULT_COLLAPSE_STRINGS_OVER,
+  autoFixJson: true,
   shortcuts: DEFAULT_SHORTCUTS,
 };
 

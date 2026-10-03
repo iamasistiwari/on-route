@@ -388,6 +388,7 @@ const USER_SETTING_KEYS = [
   'autoSaveIntervalSeconds',
   'collapseLongStrings',
   'collapseStringsOver',
+  'autoFixJson',
   'shortcuts',
 ] as const satisfies readonly (keyof UserSettings)[];
 
@@ -401,6 +402,7 @@ export function userSettings(): UserSettings {
     autoSaveIntervalSeconds: !Number.isFinite(n) ? 10 : n <= 0 ? 0 : Math.min(3600, Math.max(5, Math.round(n))),
     collapseLongStrings: cfg.get<boolean>('collapseLongStrings', true) !== false,
     collapseStringsOver: Number.isFinite(over) && over >= 1 ? Math.min(100_000, Math.round(over)) : DEFAULT_COLLAPSE_STRINGS_OVER,
+    autoFixJson: cfg.get<boolean>('autoFixJson', true) !== false,
     shortcuts: normalizeShortcuts(cfg.get('shortcuts')),
   };
 }

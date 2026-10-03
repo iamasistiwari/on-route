@@ -16,3 +16,8 @@ package-lock.json
 .on_route/**
 *.vsix
 .playwright-mcp/**
+images/**
+media/logo.svg
+PUBLISHING.md
+**/.DS_Store
+**/*.test.*

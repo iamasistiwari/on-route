@@ -1,4 +1,5 @@
 // Formatting helpers. Pure; no DOM.
+import { jsonrepair } from 'jsonrepair';
 import { isEnabled, type AuthConfig } from '../../shared/model';
 
 function trimNum(n: number): string {
@@ -152,15 +153,33 @@ export function prettyJson(text: string): { text: string; ok: boolean } {
   }
 }
 
+interface Prepared {
+  /** Text with `{{var}}` placeholders swapped for string markers. */
+  text: string;
+  raws: string[];
+  /** The text was edited beyond placeholder substitution. */
+  changed: boolean;
+}
+
+const SMART_QUOTES = new Set(['\u201c', '\u201d']);
+
+/** Next non-whitespace character at or after `i` ('' at the end). */
+function peekSolid(text: string, i: number): string {
+  while (i < text.length && /\s/.test(text[i])) i++;
+  return text[i] ?? '';
+}
+
 /**
- * Format JSON that may contain unquoted {{variables}} (e.g. `{"id": {{userId}}}`).
- * Lenient about what people paste: `//` and `/* *\/` comments, trailing commas and raw tabs/newlines
- * inside strings are cleaned up. Returns null when the text is still not valid JSON.
+ * Swap `{{variables}}` outside strings for markers, strip comments and trailing commas and collapse raw
+ * tabs/newlines in strings. With `repair`, also fix what people type by hand: a doubled closing quote
+ * (`"x""`), doubled or leading commas and curly quotes used as string delimiters.
  */
-export function formatJson(text: string): string | null {
+function prepareJson(text: string, repair: boolean): Prepared {
   const raws: string[] = [];
   let out = '';
   let inString = false;
+  let smart = false; // current string was opened with a curly quote
+  let changed = false;
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
     if (inString) {
@@ -170,25 +189,42 @@ export function formatJson(text: string): string | null {
       } else if (c === '\n' || c === '\r' || c === '\t') {
         // Literal control characters are invalid in JSON strings; collapse them to a space.
         if (!out.endsWith(' ')) out += ' ';
+        changed = true;
+      } else if (smart && SMART_QUOTES.has(c)) {
+        out += '"';
+        inString = false;
+      } else if (smart && c === '"') {
+        out += '\\"';
+      } else if (c === '"') {
+        out += c;
+        inString = false;
+        // `"hello""` followed by a delimiter: the second quote is a typo, not an empty string.
+        if (repair && text[i + 1] === '"' && /^[,}\]:]?$/.test(peekSolid(text, i + 2))) {
+          i++;
+          changed = true;
+        }
       } else {
         out += c;
-        if (c === '"') inString = false;
       }
       continue;
     }
-    if (c === '"') {
+    if (c === '"' || (repair && SMART_QUOTES.has(c))) {
       inString = true;
-      out += c;
+      smart = c !== '"';
+      if (smart) changed = true;
+      out += '"';
       continue;
     }
     if (c === '/' && text[i + 1] === '/') {
       const end = text.indexOf('\n', i);
       i = end === -1 ? text.length : end - 1;
+      changed = true;
       continue;
     }
     if (c === '/' && text[i + 1] === '*') {
       const end = text.indexOf('*/', i + 2);
       i = end === -1 ? text.length : end + 1;
+      changed = true;
       continue;
     }
     if (c === '{' && text[i + 1] === '{') {
@@ -200,18 +236,73 @@ export function formatJson(text: string): string | null {
         continue;
       }
     }
+    if (repair && c === ',' && /[,{[]$/.test(out.trimEnd())) {
+      changed = true; // `,,` or `{,`
+      continue;
+    }
     if (c === '}' || c === ']') {
       // Drop a trailing comma before the closing bracket.
-      out = out.replace(/,(\s*)$/, '$1');
+      const trimmed = out.replace(/,(\s*)$/, '$1');
+      if (trimmed !== out) changed = true;
+      out = trimmed;
     }
     out += c;
   }
+  return { text: out, raws, changed };
+}
+
+function restore(value: unknown, raws: string[]): string {
+  return JSON.stringify(value, null, 2).replace(/"__ORV_(\d+)__"/g, (_, n: string) => raws[Number(n)]);
+}
+
+/**
+ * Format JSON that may contain unquoted {{variables}} (e.g. `{"id": {{userId}}}`).
+ * Lenient about what people paste: `//` and `/* *\/` comments, trailing commas and raw tabs/newlines
+ * inside strings are cleaned up. Returns null when the text is still not valid JSON.
+ */
+export function formatJson(text: string): string | null {
+  const { text: out, raws } = prepareJson(text, false);
   try {
-    const formatted = JSON.stringify(JSON.parse(out), null, 2);
-    return formatted.replace(/"__ORV_(\d+)__"/g, (_, n: string) => raws[Number(n)]);
+    return restore(JSON.parse(out), raws);
   } catch {
     return null;
   }
+}
+
+export interface JsonRepair {
+  /** Pretty-printed, valid JSON ({{variables}} kept). */
+  text: string;
+  /** The input was not valid JSON and had to be repaired. */
+  fixed: boolean;
+}
+
+/**
+ * Like `formatJson`, but repairs broken JSON as well: missing or doubled commas, doubled quotes,
+ * single/curly quotes, unquoted keys, unescaped inner quotes, missing or extra brackets, Python
+ * `True`/`None`, truncated strings… Returns null when it cannot be repaired into an object or array
+ * (so plain text is never silently turned into a JSON string).
+ */
+export function repairJson(text: string): JsonRepair | null {
+  if (!text.trim()) return null;
+  const strict = prepareJson(text, false);
+  try {
+    return { text: restore(JSON.parse(strict.text), strict.raws), fixed: strict.changed };
+  } catch {
+    /* repair below */
+  }
+  const loose = prepareJson(text, true);
+  let value: unknown;
+  try {
+    value = JSON.parse(loose.text);
+  } catch {
+    try {
+      value = JSON.parse(jsonrepair(loose.text));
+    } catch {
+      return null;
+    }
+  }
+  if (value === null || typeof value !== 'object') return null;
+  return { text: restore(value, loose.raws), fixed: true };
 }
 
 export function countEnabled(rows: { key: string; enabled?: boolean }[]): number {

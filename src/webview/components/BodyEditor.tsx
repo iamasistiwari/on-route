@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import type { ViewUpdate } from '@codemirror/view';
 import type { BodyConfig, RequestMethod } from '../../shared/model';
 import type { VariableInfo } from '../../shared/protocol';
-import { formatJson } from '../lib/format';
+import { formatJson, repairJson } from '../lib/format';
 import { isEmptyJson, type BodySuggestion, type JsonKeySuggestion } from '../lib/suggest';
 import { CodeView, type CodeLanguage } from './CodeView';
 import { KeyValueTable } from './KeyValueTable';
@@ -85,11 +85,11 @@ function BodyEditorInner({
     setJsonError(false);
   };
 
-  /** Pretty-print the JSON body. Returns false when it is not valid JSON. */
+  /** Pretty-print the JSON body, repairing it when broken. Returns false when it cannot be repaired. */
   const format = useCallback((): boolean => {
     const { value: v, onChange: change } = latest.current;
     if (v.type !== 'json') return false;
-    const formatted = formatJson(v.content);
+    const formatted = v.content.trim() ? (repairJson(v.content)?.text ?? null) : formatJson(v.content);
     setJsonError(formatted === null);
     if (formatted !== null && formatted !== v.content) change({ ...v, content: formatted });
     return formatted !== null;

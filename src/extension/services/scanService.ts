@@ -63,7 +63,7 @@ export class ScanService implements vscode.Disposable {
     const last = this._status.last;
     if (trigger === 'auto' && last && Date.now() - last.at < MIN_AUTO_GAP_MS) return Promise.resolve(last);
     const running: Promise<ScanRun | undefined> = Promise.resolve(
-      vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: '$(radio-tower) On Route: scanning endpoints' }, () => this.run(trigger)),
+      vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: '$(sync~spin) On Route: scanning endpoints' }, () => this.run(trigger)),
     )
       .catch(() => undefined)
       .finally(() => {

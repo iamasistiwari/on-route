@@ -16,6 +16,7 @@ import { decodeBase64Paste, type DecodedPaste } from '../lib/base64Paste';
 import { AuthEditor } from '../components/AuthEditor';
 import { BodyEditor } from '../components/BodyEditor';
 import { CodeDrawer } from '../components/CodeDrawer';
+import { InheritedAuthRows } from '../components/InheritedAuthRows';
 import { KeyValueTable } from '../components/KeyValueTable';
 import { METHOD_TEXT } from '../components/MethodBadge';
 import { ResponseView, type ResponseTab } from '../components/ResponseView';
@@ -26,7 +27,7 @@ import { UrlInput } from '../components/UrlInput';
 import { WebSocketView, WsComposer } from '../components/WebSocketView';
 import { Button, DirtyDot, Spinner, cx } from '../components/ui';
 import { deepEqual } from '../lib/equal';
-import { countEnabled } from '../lib/format';
+import { countEnabled, repairJson } from '../lib/format';
 import { jsonKeyCorpus, suggestBodies, suggestUrl, type UrlSuggestContext } from '../lib/suggest';
 import { UndoStack, requestEditKey } from '../lib/undo';
 import { parentFolderId } from '../lib/tree';
@@ -382,13 +383,23 @@ export function RequestView() {
       wsPrimary();
       return;
     }
+    // Repair and format the JSON body (`"x""`, missing commas, single quotes…) instead of sending something
+    // the server can only reject. The result lands in the editor as one undoable edit.
+    let outgoing = request;
+    if (context.settings.autoFixJson && request.body.type === 'json') {
+      const repaired = repairJson(request.body.content);
+      if (repaired && repaired.text !== request.body.content) {
+        outgoing = { ...request, body: { ...request.body, content: repaired.text } };
+        update({ body: outgoing.body });
+      }
+    }
     lastSendAtRef.current = Date.now();
     setSending(Date.now());
     setPaste(null);
     setFailure(null);
     if (responseTab === 'history') setResponseTab('body');
-    post({ type: 'sendRequest', request });
-  }, [request, responseTab, wsPrimary]);
+    post({ type: 'sendRequest', request: outgoing });
+  }, [request, responseTab, wsPrimary, context.settings.autoFixJson, update]);
 
   const cancel = useCallback(() => {
     post({ type: 'cancelRequest' });
@@ -836,10 +847,28 @@ export function RequestView() {
           />
           <div className="flex min-h-0 flex-1 flex-col overflow-auto px-3 py-2">
             {tab === 'params' && (
-              <KeyValueTable rows={request.params} variables={context.variables} onChange={(params) => update({ params })} keyPlaceholder="Parameter" />
+              <>
+                <InheritedAuthRows
+                  own={request.auth}
+                  inherited={{ auth: context.inheritedAuth, source: context.inheritedAuthSource }}
+                  target="query"
+                  rows={request.params}
+                  onEdit={() => setTab('auth')}
+                />
+                <KeyValueTable rows={request.params} variables={context.variables} onChange={(params) => update({ params })} keyPlaceholder="Parameter" />
+              </>
             )}
             {tab === 'headers' && (
-              <KeyValueTable rows={request.headers} variables={context.variables} onChange={(headers) => update({ headers })} keyPlaceholder="Header" />
+              <>
+                <InheritedAuthRows
+                  own={request.auth}
+                  inherited={{ auth: context.inheritedAuth, source: context.inheritedAuthSource }}
+                  target="header"
+                  rows={request.headers}
+                  onEdit={() => setTab('auth')}
+                />
+                <KeyValueTable rows={request.headers} variables={context.variables} onChange={(headers) => update({ headers })} keyPlaceholder="Header" />
+              </>
             )}
             {tab === 'body' && ws && (
               <WsComposer

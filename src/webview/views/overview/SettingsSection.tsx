@@ -70,6 +70,16 @@ export function SettingsSection({ config, settings }: { config: ProjectConfig; s
                 onCommit={(collapseStringsOver) => update({ collapseStringsOver })}
               />
             </div>
+            <label className="flex cursor-pointer items-center justify-between gap-4 px-4 py-3">
+              <span className="min-w-0">
+                <span className="block font-medium">Fix and format JSON when sending</span>
+                <span className="block text-[12px] text-muted">
+                  Repairs missing or doubled commas and quotes, single quotes, unquoted keys and missing brackets in a JSON body and formats it when you
+                  send it. {'{{variables}}'} are kept.
+                </span>
+              </span>
+              <Switch checked={settings.autoFixJson} label="Fix and format JSON when sending" onChange={(autoFixJson) => update({ autoFixJson })} />
+            </label>
           </div>
         </div>
 
